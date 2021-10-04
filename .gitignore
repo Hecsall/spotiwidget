@@ -2,7 +2,6 @@
 firebase-spotify-widget.json
 .spotify_caches/
 .flask_session/
-templates/themes/*.css
 __pycache__/
 *.pyc
 venv/
