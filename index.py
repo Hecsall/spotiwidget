@@ -81,8 +81,7 @@ def save_user_to_db(auth_manager, code):
 
 # Homepage that handles login
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route('/')
 def index():
     # TODO: check if this caching is necessary
     if not session.get('uuid'):
