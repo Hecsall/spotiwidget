@@ -1,6 +1,5 @@
 from base64 import b64decode, b64encode
 from flask import Flask, session, request, render_template, redirect, Response
-from flask_session import Session
 from firebase_admin import credentials, firestore
 import firebase_admin
 import spotipy
@@ -51,21 +50,35 @@ firebase_db = firestore.client()
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = FLASK_SECRET_KEY
-app.config['SESSION_TYPE'] = 'filesystem'
-app.config['SESSION_FILE_DIR'] = './.flask_session/'
-Session(app)
+app.secret_key = FLASK_SECRET_KEY
 
 
-# Define and create cache folder if does not exists
-caches_folder = './.spotify_caches/'
-if not os.path.exists(caches_folder):
-    os.makedirs(caches_folder)
+# Spotipy custom Cache Handler
+class SessionCacheHandler(spotipy.cache_handler.CacheHandler):
+    def get_cached_token(self):
+        """
+        Get and return a token_info dictionary object.
+        """
+        return session.get("unused_token_info")
+
+    def save_token_to_cache(self, token_info):
+        """
+        Save a token_info dictionary object to the cache and return None.
+        """
+        session["unused_token_info"] = token_info
+        return None
 
 
-# Return session cache path for current user
-def session_cache_path():
-    return caches_folder + session.get('uuid')
+# Spotipy Auth Manager
+cache_handler = SessionCacheHandler()
+auth_manager = spotipy.oauth2.SpotifyOAuth(
+    client_id=SPOTIFY_CLIENT_ID,
+    client_secret=SPOTIFY_CLIENT_SECRET,
+    redirect_uri=REDIRECT_URI,
+    scope=SPOTIFY_SCOPES,
+    cache_handler=cache_handler,
+    show_dialog=False
+)
 
 
 # When logging in, save the user inside the Firestore Database
@@ -79,6 +92,9 @@ def save_user_to_db(auth_manager, code):
     # Save to Database
     doc_ref = firebase_db.collection("users").document(user_id)
     doc_ref.set(token_info)
+    # Save to session
+    session["token_info"] = token_info
+    session["token_info"]["uid"] = user_id
     return user_id
 
 
@@ -86,74 +102,40 @@ def save_user_to_db(auth_manager, code):
 
 @app.route('/')
 def index():
-    # TODO: check if this caching is necessary
-    if not session.get('uuid'):
-        # Step 1. Visitor is unknown, give random ID
-        session['uuid'] = str(uuid.uuid4())
-
-    # TODO: check if this caching is necessary
-    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
-    auth_manager = spotipy.oauth2.SpotifyOAuth(
-        client_id=SPOTIFY_CLIENT_ID,
-        client_secret=SPOTIFY_CLIENT_SECRET,
-        redirect_uri=REDIRECT_URI,
-        scope=SPOTIFY_SCOPES,
-        cache_handler=cache_handler,
-        show_dialog=True
-    )
-
     if request.args.get("code"):
-        # Step 3. Being redirected from Spotify auth page
         user_id = save_user_to_db(auth_manager=auth_manager, code=request.args.get("code"))
         return redirect('/editor?uid={}'.format(user_id))
 
-    rendered_data = {
-        "title": "Home",
-    }
+    rendered_data = {"title": "Home"}
 
-    # TODO: check if this caching is necessary
-    if not auth_manager.validate_token(cache_handler.get_cached_token()):
-        # Step 2. Display sign in link when no token
+    session_token_info = session.get("token_info")
+    if not auth_manager.validate_token(session_token_info):
         auth_url = auth_manager.get_authorize_url()
         rendered_data["auth_url"] = auth_url
         rendered_data["is_authenticated"] = False
-        return render_template('index.html', **rendered_data)
-
-    # Step 4. Signed in, display data
-    spotify = spotipy.Spotify(auth_manager=auth_manager)
-    rendered_data["spotify"] = spotify
-    rendered_data["is_authenticated"] = True
+    else:
+        spotify = spotipy.Spotify(auth_manager=auth_manager)
+        rendered_data["spotify"] = spotify
+        rendered_data["is_authenticated"] = True
 
     return render_template('index.html', **rendered_data)
 
 
 # Disconnect the user
-# Remove the CACHE file (.cache-test) so that a new user can authorize.
 @app.route('/sign_out')
 def sign_out():
     try:
-        os.remove(session_cache_path())
-        session.clear()
+        session.pop("token_info")
     except OSError as e:
-        print("Error: %s - %s." % (e.filename, e.strerror))
+        print("Error: %s" % (e))
     return redirect('/')
 
 
+# TODO dont use CACHE_TOKEN_INFO, use session
 def get_access_token(uid):
     global CACHE_TOKEN_INFO
 
     token_info = CACHE_TOKEN_INFO.get(uid, None)
-
-    # TODO: check if this caching is necessary
-    cache_handler = spotipy.cache_handler.CacheFileHandler(cache_path=session_cache_path())
-    auth_manager = spotipy.oauth2.SpotifyOAuth(
-        client_id=SPOTIFY_CLIENT_ID,
-        client_secret=SPOTIFY_CLIENT_SECRET,
-        redirect_uri=REDIRECT_URI,
-        scope=SPOTIFY_SCOPES,
-        cache_handler=cache_handler,
-        show_dialog=True
-    )
 
     if not token_info:
         # Load from firebase
