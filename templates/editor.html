@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+
+
+{{ title }}<br><br>
+
+User: {{ uid }}<br>
+Now playing: {{ is_now_playing }}<br><br>
+
+<img src="http://localhost:5000/widget?uid={{ uid }}" alt="Spotify Widget">
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+
+
+{% if is_authenticated %}
+    <h2>Hi {{ spotify.me()["id"] }}</h2>
+    <a href="/sign_out">Sign out<a/><br><br>
+    <a href="/editor?uid={{ spotify.me()["id"] }}">Go to Widget Editor</a>
+{% else %}
+    <h2><a href="{{ auth_url }}">Sign in</a></h2>
+{% endif %}
+
+
+{% endblock %}
