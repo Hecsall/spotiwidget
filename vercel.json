@@ -12,10 +12,6 @@
             "dest": "/"
         },
         {
-            "src": "/editor(?<uid>)",
-            "dest": "/editor?uid=$uid"
-        },
-        {
             "src": "/editor",
             "dest": "/editor"
         },
