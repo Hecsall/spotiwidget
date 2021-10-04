@@ -10,6 +10,22 @@
         {
             "src": "/",
             "dest": "/"
+        },
+        {
+            "src": "/editor(?<uid>)",
+            "dest": "/editor?uid=$uid"
+        },
+        {
+            "src": "/editor",
+            "dest": "/editor"
+        },
+        {
+            "src": "/sign-out",
+            "dest": "/sign-out"
+        },
+        {
+            "src": "/widget",
+            "dest": "/widget"
         }
     ]
 }

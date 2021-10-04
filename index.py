@@ -122,7 +122,7 @@ def index():
 
 
 # Disconnect the user
-@app.route('/sign_out')
+@app.route('/sign-out')
 def sign_out():
     try:
         session.pop("token_info")
