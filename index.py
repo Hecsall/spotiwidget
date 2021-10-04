@@ -80,7 +80,9 @@ def save_user_to_db(auth_manager, code):
 
 
 # Homepage that handles login
-@app.route('/')
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
 def index():
     # TODO: check if this caching is necessary
     if not session.get('uuid'):
@@ -304,7 +306,5 @@ def widget():
     return resp
 
 
-# app.run() needed for Vercel
-# Used when you use `python app.py`
 if __name__ == "__main__":
     app.run(debug=True)

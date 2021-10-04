@@ -6,3 +6,4 @@ templates/themes/*.css
 __pycache__/
 *.pyc
 venv/
+.vercel
