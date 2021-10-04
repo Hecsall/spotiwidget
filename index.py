@@ -18,10 +18,13 @@ import sass
 
 
 # Compile all SCSS themes
-# sass.compile(
-#     dirname=('templates/themes', 'templates/themes')
-#     # output_style='compressed'
-# )
+try:
+    sass.compile(
+        dirname=('templates/themes', 'templates/themes'),
+        output_style='compressed'
+    )
+except:
+    print("Could not compile SCSS files")
 
 
 # Load environment variables
