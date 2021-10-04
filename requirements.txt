@@ -1,5 +1,5 @@
 black==21.9b0
-Flask==2.0.2
+Flask==1.1.2
 Flask-Session==0.4.0
 flake8==3.9.2
 requests==2.26.0
