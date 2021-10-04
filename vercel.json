@@ -8,20 +8,8 @@
     ],
     "routes": [
         {
-            "src": "/",
+            "src": "/(.*)",
             "dest": "/"
-        },
-        {
-            "src": "/editor",
-            "dest": "/editor"
-        },
-        {
-            "src": "/sign-out",
-            "dest": "/sign-out"
-        },
-        {
-            "src": "/widget",
-            "dest": "/widget"
         }
     ]
 }
