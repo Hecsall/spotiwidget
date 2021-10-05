@@ -53,7 +53,9 @@ app.secret_key = FLASK_SECRET_KEY
 
 
 # Spotipy custom Cache Handler
-class SessionCacheHandler(spotipy.cache_handler.CacheHandler):
+# It just saves the token_info in an unused variable since
+# not saving it would trigger a Spotipy error
+class UselessCacheHandler(spotipy.cache_handler.CacheHandler):
     def get_cached_token(self):
         """
         Get and return a token_info dictionary object.
@@ -69,7 +71,7 @@ class SessionCacheHandler(spotipy.cache_handler.CacheHandler):
 
 
 # Spotipy Auth Manager
-cache_handler = SessionCacheHandler()
+cache_handler = UselessCacheHandler()
 auth_manager = spotipy.oauth2.SpotifyOAuth(
     client_id=SPOTIFY_CLIENT_ID,
     client_secret=SPOTIFY_CLIENT_SECRET,
@@ -180,10 +182,6 @@ def editor():
     if not uid:
         return redirect('/')
 
-    # TODO: check if this caching is necessary
-    if not session.get('uuid'):
-        session['uuid'] = str(uuid.uuid4())
-
     access_token = get_access_token(uid)
     if not access_token:
         return Response('User not authorized', status=403)
@@ -248,10 +246,6 @@ def widget():
     if not uid:
         return redirect('/')
 
-    # TODO: check if this caching is necessary
-    if not session.get('uuid'):
-        session['uuid'] = str(uuid.uuid4())
-
     theme = request.args.get("theme", default='default')
 
     access_token = get_access_token(uid)
@@ -272,8 +266,8 @@ def widget():
     song_uri = song["item"]["uri"]
 
     # Generate the SVG
-    # Needed to pass single parameters because the caching decorator
-    # only supports unhashable types (no dict/list)
+    # I need to pass single parameters because the caching decorator
+    # does not accept dictionaries/lists
     svg_code = generate_svg(
         song_title,
         song_artist,
@@ -289,7 +283,7 @@ def widget():
     resp.headers["Cache-Control"] = "s-maxage=1"
 
     return resp
-
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
