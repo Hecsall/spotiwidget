@@ -175,7 +175,7 @@ def get_song_info(access_token):
 
 # Widget Editor page
 @app.route('/editor')
-def currently_playing():
+def editor():
     uid = request.args.get("uid")
     if not uid:
         return redirect('/')
