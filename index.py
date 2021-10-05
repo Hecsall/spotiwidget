@@ -21,7 +21,7 @@ try:
         dirname=('templates/themes', 'templates/themes'),
         output_style='compressed'
     )
-except:
+except Exception as e:
     print("Could not compile SCSS files")
 
 
@@ -132,21 +132,21 @@ def sign_out():
     return redirect('/')
 
 
-# TODO dont use CACHE_TOKEN_INFO, use session
+# Retrieve Access Token from Session or Firestore
 def get_access_token(uid):
-    global CACHE_TOKEN_INFO
+    token_info = session.get("token_info")
 
-    token_info = CACHE_TOKEN_INFO.get(uid, None)
+    # If getting the widget for another user, clear
+    # your own token_info stored in the session
+    if token_info is not None and token_info["uid"] != uid:
+        token_info = None
 
-    if not token_info:
-        # Load from firebase
+    if token_info is None:
         doc_ref = firebase_db.collection("users").document(uid)
         doc = doc_ref.get()
         if not doc.exists:
             return False
         token_info = doc.to_dict()
-        # Cache token_info
-        CACHE_TOKEN_INFO[uid] = token_info
 
     if auth_manager.is_token_expired(token_info):
         updated_token_info = auth_manager.validate_token(token_info)
@@ -207,6 +207,7 @@ def load_image_b64(url):
 # Render the Widget SVG
 @functools.lru_cache(maxsize=128)
 def generate_svg(
+    theme,
     song_title,
     song_artist,
     song_cover_base64,
@@ -214,15 +215,8 @@ def generate_svg(
     song_duration,
     song_uri,
     is_now_playing,
-    theme,
 ):
-    if is_now_playing:
-        title_text = "Now playing"
-    else:
-        title_text = "Recently played"
-
     rendered_data = {
-        "title_text": title_text,
         "song_title": song_title,
         "song_artist": song_artist,
         "song_cover_base64": song_cover_base64,
@@ -233,10 +227,7 @@ def generate_svg(
         "height": '600px'
     }
 
-    if theme != 'default':
-        return render_template(f"themes/{theme}.html", **rendered_data)
-    else:
-        return render_template("themes/default.html", **rendered_data)
+    return render_template(f"themes/{theme}.html", **rendered_data)
 
 
 # Widget SVG direct URL
@@ -248,13 +239,13 @@ def widget():
 
     theme = request.args.get("theme", default='default')
 
+    # Get the song info
     access_token = get_access_token(uid)
     if not access_token:
         return Response('User not authorized', status=403)
-
     song, is_now_playing = get_song_info(access_token)
 
-    # Pick data we need in the widget
+    # Pick data we need for the widget
     song_title = song["item"]["name"]
     if song["item"]["type"] == "track":
         song_cover_base64 = load_image_b64(song["item"]["album"]["images"][0]["url"])
@@ -269,6 +260,7 @@ def widget():
     # I need to pass single parameters because the caching decorator
     # does not accept dictionaries/lists
     svg_code = generate_svg(
+        theme,
         song_title,
         song_artist,
         song_cover_base64,
@@ -276,14 +268,13 @@ def widget():
         song_duration,
         song_uri,
         is_now_playing,
-        theme,
     )
 
     resp = Response(svg_code, mimetype="image/svg+xml")
     resp.headers["Cache-Control"] = "s-maxage=1"
 
     return resp
-    
+
 
 if __name__ == "__main__":
     app.run(debug=True)
