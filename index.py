@@ -11,7 +11,6 @@ import json
 import uuid
 import functools
 import requests
-import frozendict
 from random import randint
 import sass
 
@@ -273,6 +272,8 @@ def widget():
     song_uri = song["item"]["uri"]
 
     # Generate the SVG
+    # Needed to pass single parameters because the caching decorator
+    # only supports unhashable types (no dict/list)
     svg_code = generate_svg(
         song_title,
         song_artist,
