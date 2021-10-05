@@ -13,7 +13,6 @@ This project used to be a fork of [https://github.com/kittinan/spotify-github-pr
 - **SCSS styles**: Theme styles in SCSS (compiled when `app.py` runs).
 
 ## **TODO**
-- Maybe use Spotipy builtin caching
 - Plan how to manage widgets width and height automatically
 - Optimize themes visuals (like scrolling titles)
 - More customizations parameters
