@@ -1,0 +1,23 @@
+<svg 
+    width="320"
+    height="{{height}}"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    aria-labelledby="spotiwidget-title"
+    role="img"
+>
+    <title id="spotiwidget-title">
+        {% if is_now_playing %}
+            Now Playing on Spotify
+        {% else %}
+            Recently played on Spotify
+        {% endif %}
+    </title>
+
+    {# Load css file (compiled by running `python index.py`) #}
+    <style>{% include "themes/{}.css".format(theme) %}</style>
+
+    <foreignObject width="320" height="{{height}}">
+        {% block content %}{% endblock %}
+    </foreignObject>
+</svg>

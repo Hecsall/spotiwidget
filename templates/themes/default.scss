@@ -59,8 +59,19 @@
         bottom: 1px;
         height: 3px;
         position: absolute;
-        width: 3px;
         animation: sound 0ms -800ms linear infinite alternate;
+    }
+}
+
+@keyframes sound {
+    0% {
+    opacity: .35;
+    height: 3px;
+    }
+
+    100% {
+    opacity: 1;
+    height: 20px;
     }
 }
 
@@ -91,17 +102,5 @@
         width: #{'{{ ((song_progress / song_duration) * 100)|int }}%'};
         background: #B3B3B3; // #1ed760
         transition: width #{'{{ ((song_duration - song_progress) / 1000)|int }}'}s linear;
-    }
-}
-
-@keyframes sound {
-    0% {
-    opacity: .35;
-    height: 3px;
-    }
-
-    100% {
-    opacity: 1;
-    height: 22px;
     }
 }
