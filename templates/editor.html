@@ -13,10 +13,10 @@
         </div>
     </div>
     <div class="row editor">
-        <div class="col col-sm-12 col-md-4">
+        <div class="col col-12 col-md-6 col-xl-4 editor-preview">
             <iframe src="" frameborder="0"></iframe>
         </div>
-        <div class="col col-sm-12 col-md-8">
+        <div class="col col-12 col-md-6 col-xl-8">
             <div class="row">
                 <div class="col col-sm-12">
 
@@ -32,49 +32,60 @@
                             {% endfor %}
                         </select>
                     </div>
-               
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="invert_artist_title">
-                            <label class="form-check-label" for="invert_artist_title">
-                                Invert Artist/Title
-                            </label>
+
+                    <div class="row mb-3">
+                        <div class="col col-sm-6 col-md-12 col-lg-4">
+                            <label class="form-check-label" for="invert_artist_title">Invert Artist/Title</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="invert_artist_title">
+                            </div>
+                        </div>
+                        <div class="col col-sm-6 col-md-12 col-lg-5">
+                            <label class="form-check-label" for="cover">Cover</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="cover" checked>
+                            </div>
                         </div>
                     </div>
                     
-                    <div class="mb-3">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="progress_bar" checked>
-                            <label class="form-check-label" for="progress_bar">
-                                Show Progress Bar
-                            </label>
+                    <div class="row mb-3">
+                        <div class="col col-sm-6 col-md-12 col-lg-4">
+                            <label class="form-check-label" for="progress_bar">Progress Bar</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="progress_bar" checked>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label class="form-label" for="progress_color">Progress Bar color</label>
-                            <input type="color" list="progress_color_list" class="form-control" id="progress_color" value="#B3B3B3" aria-label="Username">
-                            <datalist id="progress_color_list">
-                                <option value="#B3B3B3">
-                                <option value="#1ED760">
-                            </datalist>
+                        <div class="col col-sm-6 col-md-12 col-lg-5">
+                            <div class="form-group">
+                                <label class="form-label" for="progress_color">Progress Bar color</label>
+                                <input type="color" list="progress_color_list" class="form-control" id="progress_color" value="#B3B3B3" aria-label="Username">
+                                <datalist id="progress_color_list">
+                                    <option value="#B3B3B3">
+                                    <option value="#1ED760">
+                                    <option value="#FFFFFF">
+                                </datalist>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="sound_waves" checked>
-                            <label class="form-check-label" for="sound_waves">
-                                Show Sound Waves
-                            </label>
+                    <div class="row mb-3">
+                        <div class="col col-sm-6 col-md-12 col-lg-4">
+                            <label class="form-check-label" for="sound_waves">Sound Waves</label>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="sound_waves" checked>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="sound_waves_color">Sound Waves color</label>
-                        <input type="color" list="sound_waves_color_list" class="form-control" id="sound_waves_color" value="#1ED760" aria-label="Username">
-                        <datalist id="sound_waves_color_list">
-                            <option value="#1ED760">
-                            <option value="#FFFFFF">
+                        <div class="col col-sm-6 col-md-12 col-lg-5">
+                            <div class="form-group">
+                                <label class="form-label" for="sound_waves_color">Sound Waves color</label>
+                                <input type="color" list="sound_waves_color_list" class="form-control" id="sound_waves_color" value="#1ED760" aria-label="Username">
+                                <datalist id="sound_waves_color_list">
+                                    <option value="#1ED760">
+                                    <option value="#FFFFFF">
 
-                        </datalist>
+                                </datalist>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -99,6 +110,7 @@ var requestParams = {
     sound_waves: true,
     sound_waves_color: '#1ED760',
     progress_color: '#B3B3B3',
+    cover: true,
 }
 
 // Change Theme

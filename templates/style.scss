@@ -45,8 +45,9 @@ main {
 
 #editor-page {
     .editor {
-        min-height: 600px;
-        
+        .editor-preview {
+            min-height: 500px;
+        }
         iframe {
             width: 100%;
             height: 100%;

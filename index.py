@@ -170,7 +170,7 @@ def get_access_token(uid):
 def get_song_info(access_token):
     spotify = spotipy.Spotify(auth=access_token)
     track = spotify.current_user_playing_track()
-    if track is not None:
+    if track is not None and track["item"] is not None:
         return track, True
     else:
         # Get a random recently played track from the last 10
@@ -229,6 +229,7 @@ def generate_svg(
     sound_waves,
     sound_waves_color,
     progress_color,
+    cover,
 ):
     rendered_data = {
         "theme": theme,
@@ -245,6 +246,7 @@ def generate_svg(
         'sound_waves': sound_waves,
         'sound_waves_color': sound_waves_color,
         'progress_color': progress_color,
+        'cover': cover,
     }
 
     return render_template(f"themes/{theme}.html", **rendered_data)
@@ -270,6 +272,7 @@ def widget():
     progress_color = request.args.get("progress_color", '#B3B3B3')
     sound_waves = request.args.get('sound_waves') == 'true'
     sound_waves_color = request.args.get('sound_waves_color', '#1ed760')
+    cover = request.args.get('cover') == 'true'
 
     # Get the song info
     access_token = get_access_token(uid)
@@ -306,6 +309,7 @@ def widget():
         sound_waves,
         sound_waves_color,
         progress_color,
+        cover,
     )
 
     resp = Response(svg_code, mimetype="image/svg+xml")

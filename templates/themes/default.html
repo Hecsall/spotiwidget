@@ -33,11 +33,13 @@
         </div>
     {% endif %}
 
+    {% if cover %}
     <div class='cover'>
         <a href="{{ song_uri }}" title="Open on Spotify" target="_blank">
             <img src="data:image/png;base64, {{song_cover_base64}}" />
         </a>
     </div>
+    {% endif %}
 
     {% if is_now_playing and progress_bar %}
     <div class="progress-container">
@@ -52,6 +54,7 @@
 (function(){
 {% if is_now_playing %}
 
+    {% if progress_bar %}
     // On page load, tell the progress to stretch to 100% width.
     // Since the width in CSS has a transition of `remaining_duration` seconds,
     // the css will handle the animation smoothly without any more JavaScript.
@@ -59,7 +62,8 @@
         var progressBar = document.querySelector('.progress');
         progressBar.style.width = '100%';
     }, 200);
-
+    {% endif %}
+    
     // On page load, start a timer that will reload the widget when the song ends,
     // allowing the widget to refresh and display the next song. 
     var songLength = parseInt("{{song_duration}}");
