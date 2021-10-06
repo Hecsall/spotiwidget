@@ -225,8 +225,10 @@ def generate_svg(
     song_uri,
     is_now_playing,
     invert_artist_title,
-    song_progress_bar,
-    sound_waves
+    progress_bar,
+    sound_waves,
+    sound_waves_color,
+    progress_color,
 ):
     rendered_data = {
         "theme": theme,
@@ -239,8 +241,10 @@ def generate_svg(
         "song_uri": song_uri,
         "is_now_playing": is_now_playing,
         'invert_artist_title': invert_artist_title,
-        'song_progress_bar': song_progress_bar,
-        'sound_waves': sound_waves
+        'progress_bar': progress_bar,
+        'sound_waves': sound_waves,
+        'sound_waves_color': sound_waves_color,
+        'progress_color': progress_color,
     }
 
     return render_template(f"themes/{theme}.html", **rendered_data)
@@ -262,8 +266,10 @@ def widget():
 
     # Get all the parameters from the request
     invert_artist_title = request.args.get("invert_artist_title") == 'true'
-    song_progress_bar = request.args.get("song_progress_bar") == 'true'
+    progress_bar = request.args.get("progress_bar") == 'true'
+    progress_color = request.args.get("progress_color", '#B3B3B3')
     sound_waves = request.args.get('sound_waves') == 'true'
+    sound_waves_color = request.args.get('sound_waves_color', '#1ed760')
 
     # Get the song info
     access_token = get_access_token(uid)
@@ -296,8 +302,10 @@ def widget():
         song_uri,
         is_now_playing,
         invert_artist_title,
-        song_progress_bar,
+        progress_bar,
         sound_waves,
+        sound_waves_color,
+        progress_color,
     )
 
     resp = Response(svg_code, mimetype="image/svg+xml")

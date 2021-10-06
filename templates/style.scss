@@ -14,6 +14,7 @@ header {
     text-align: center;
     font-weight: bolder;
     background-color: #121212;
+    color: white;
 
     h1 {
         color: #1ed760;
@@ -23,6 +24,18 @@ header {
         span {
             color: white;
         }
+    }
+}
+
+footer {
+    padding: 25px 0;
+    text-align: center;
+    font-weight: bolder;
+    background-color: #121212;
+    color: white;
+
+    svg {
+        max-width: 100px;
     }
 }
 

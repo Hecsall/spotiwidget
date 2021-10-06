@@ -20,7 +20,7 @@
     line-height: 1em;
     font-weight: bold;
     margin-bottom: 11px;
-    color: #1ed760;
+    color: #1ED760;
     fill: currentColor;
 
     svg {
@@ -32,7 +32,7 @@
 }
 
 .artist {
-    color: #fff;
+    color: #FFFFFF;
     font-weight: bold;
     font-size: 20px;
     text-align: center;
@@ -42,7 +42,7 @@
 }
 
 .title {
-    color: #b3b3b3;
+    color: #B3B3B3;
     font-size: 16px;
     text-align: center;
     margin-bottom: 20px;
@@ -55,7 +55,7 @@
     width: 100%;
     
     .bar {
-        background: #1ed760;
+        background: #{'{{ sound_waves_color}}'};
         bottom: 1px;
         height: 3px;
         position: absolute;
@@ -101,7 +101,7 @@
         left: 0;
         border-radius: 5px;
         width: #{'{{ ((song_progress / song_duration) * 100)|int }}%'};
-        background: #B3B3B3; // #1ed760
+        background: #{'{{ progress_color}}'}; // #1ED760
         transition: width #{'{{ ((song_duration - song_progress) / 1000)|int }}'}s linear;
     }
 }
