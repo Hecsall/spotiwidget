@@ -13,12 +13,19 @@ import functools
 import requests
 from random import randint
 import sass
+from distutils.util import strtobool
+
+from themes import themes
 
 
 # Compile all SCSS themes
 try:
     sass.compile(
         dirname=('templates/themes', 'templates/themes'),
+        output_style='compressed'
+    )
+    sass.compile(
+        dirname=('templates/', 'templates/'),
         output_style='compressed'
     )
 except Exception as e:
@@ -193,6 +200,7 @@ def editor():
         "uid": uid,
         "song": song,
         "is_now_playing": is_now_playing,
+        "themes": themes,
     }
     return render_template("editor.html", **rendered_data)
 
@@ -208,6 +216,7 @@ def load_image_b64(url):
 @functools.lru_cache(maxsize=128)
 def generate_svg(
     theme,
+    height,
     song_title,
     song_artist,
     song_cover_base64,
@@ -215,9 +224,13 @@ def generate_svg(
     song_duration,
     song_uri,
     is_now_playing,
+    invert_artist_title,
+    song_progress_bar,
+    sound_waves
 ):
     rendered_data = {
         "theme": theme,
+        "height": height,
         "song_title": song_title,
         "song_artist": song_artist,
         "song_cover_base64": song_cover_base64,
@@ -225,7 +238,9 @@ def generate_svg(
         "song_duration": song_duration,
         "song_uri": song_uri,
         "is_now_playing": is_now_playing,
-        "height": '600px'
+        'invert_artist_title': invert_artist_title,
+        'song_progress_bar': song_progress_bar,
+        'sound_waves': sound_waves
     }
 
     return render_template(f"themes/{theme}.html", **rendered_data)
@@ -239,6 +254,16 @@ def widget():
         return redirect('/')
 
     theme = request.args.get("theme", default='default')
+    if theme not in themes:
+        print('Theme not found')
+
+    # Get this theme's max height
+    height = themes[theme]['max_height']
+
+    # Get all the parameters from the request
+    invert_artist_title = request.args.get("invert_artist_title") == 'true'
+    song_progress_bar = request.args.get("song_progress_bar") == 'true'
+    sound_waves = request.args.get('sound_waves') == 'true'
 
     # Get the song info
     access_token = get_access_token(uid)
@@ -262,6 +287,7 @@ def widget():
     # does not accept dictionaries/lists
     svg_code = generate_svg(
         theme,
+        height,
         song_title,
         song_artist,
         song_cover_base64,
@@ -269,6 +295,9 @@ def widget():
         song_duration,
         song_uri,
         is_now_playing,
+        invert_artist_title,
+        song_progress_bar,
+        sound_waves,
     )
 
     resp = Response(svg_code, mimetype="image/svg+xml")
@@ -279,20 +308,17 @@ def widget():
 
 @app.context_processor
 def context_processor():
-
     @functools.lru_cache(maxsize=128)
     def generate_css_bar(bar_count=75, bar_width=3, bar_spacing=1):
         css_bar = ""
         left = 0
         width = bar_width
         for i in range(1, bar_count + 1):
-
             anim = randint(350, 500)
             css_bar += ".bar:nth-child({})  {{ left: {}px; animation-duration: {}ms; width: {}px; }}".format(
                 i, left, anim, width
             )
             left += width + bar_spacing
-
         return css_bar
 
     return {

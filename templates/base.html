@@ -4,11 +4,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title|default("Home")}} | Spotify Widget </title>
+    <title>{{ title|default("Home")}} | SpotiWidget </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>{% include "style.css" %}</style>
 </head>
 <body>
-    <div>
-        {% block content %}{% endblock %}
+    <div id="app">
+    
+        <header>
+            <div class="container">
+                <div class="row">
+                    <div class="cell cell-sm-12 cell-md-6">
+                        <h1>Spoti<span>Widget</span></h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+        <footer>footer</footer>
+    
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    {% block scripts %}{% endblock %}
 </body>
 </html>

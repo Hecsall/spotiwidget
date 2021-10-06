@@ -2,13 +2,106 @@
     
 {% block content %}
 
+<div class="container" id="editor-page">
+    <div class="row mb-5 mt-5">
+        <div class="col col-sm-12">
+            <h1 class="huge-title">Customize it</h1>
+            <p>
+                Thinker with your widget as you like!<br>
+                <b>Current Status:</b> {{ 'Spotify is Playing' if is_now_playing else 'Spotify Not playing' }}<br> 	
+            </p>
+        </div>
+    </div>
+    <div class="row editor">
+        <div class="col col-sm-12 col-md-4">
+            <iframe src="" frameborder="0"></iframe>
+        </div>
+        <div class="col col-sm-12 col-md-8">
+            <div class="row">
+                <div class="col col-sm-12">
 
-{{ title }}<br><br>
+                    <div class="mb-3">
+                        <label for="theme">Theme</label>
+                        <select class="form-select" id="theme">
+                            {% for theme in themes %}
+                            <option value="{{ theme }}">{{ theme }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+               
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="invert_artist_title">
+                            <label class="form-check-label" for="invert_artist_title">
+                                Invert Artist/Title
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="song_progress_bar" checked>
+                            <label class="form-check-label" for="song_progress_bar">
+                                Show Song Progress Bar
+                            </label>
+                        </div>
+                    </div>
 
-User: {{ uid }}<br>
-Now playing: {{ is_now_playing }}<br><br>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="sound_waves" checked>
+                            <label class="form-check-label" for="sound_waves">
+                                Show Sound Waves
+                            </label>
+                        </div>
+                    </div>
 
-<img src="/widget?uid={{ uid }}" alt="Spotify Widget">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function(){
 
 
+
+var requestParams = {
+    uid: '{{ uid }}',
+    theme: 'default',
+    invert_artist_title: false,
+    song_progress_bar: true,
+    sound_waves: true,
+}
+
+// Change Theme
+$('body').on('change', 'select#theme', function(e){
+    var select = e.currentTarget;
+    requestParams['theme'] = select.value;
+    updateWidget();
+});
+
+// Change any checkbox
+$('body').on('change', 'input[type=checkbox]', function(e){
+    var checkbox = e.currentTarget; 
+    requestParams[checkbox.id] = checkbox.checked;
+    updateWidget();
+});
+
+
+function updateWidget() {
+    widgetUrl = `/widget?${$.param(requestParams)}`;
+    $('iframe').attr('src', widgetUrl);
+}
+
+updateWidget();
+
+
+
+})();
+</script>
 {% endblock %}

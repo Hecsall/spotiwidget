@@ -16,15 +16,22 @@
         {% endif %}
     </div>
 
-    <div class="artist">{{song_artist}}</div>
     
-    <div class="title">{{song_title}}</div>
-
-    <div class='bars'>
-        {% for i in range(0, 75) %}
-            <div class='bar'></div>
-        {% endfor %}            
-    </div>
+    {% if invert_artist_title %}
+    <div class="artist">{{ song_title }}</div>
+    <div class="title">{{ song_artist }}</div>
+    {% else %}
+    <div class="artist">{{ song_artist }}</div>
+    <div class="title">{{ song_title}}</div>
+    {% endif %}
+    
+    {% if is_now_playing and sound_waves %}
+        <div class='bars'>
+            {% for i in range(0, 75) %}
+                <div class='bar'></div>
+            {% endfor %}            
+        </div>
+    {% endif %}
 
     <div class='cover'>
         <a href="{{ song_uri }}" title="Open on Spotify" target="_blank">
@@ -32,7 +39,7 @@
         </a>
     </div>
 
-    {% if is_now_playing %}
+    {% if is_now_playing and song_progress_bar %}
     <div class="progress-container">
         <div class="progress"></div>
     </div>
