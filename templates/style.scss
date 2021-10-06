@@ -64,6 +64,9 @@ main {
     margin: 0;
 }
 
+.form-check-label, .form-label {
+    font-weight: bold;
+}
 .form-check-input:checked {
     background-color: #1ed760;
     border-color: #1ed760;
