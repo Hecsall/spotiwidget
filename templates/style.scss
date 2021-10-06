@@ -63,3 +63,8 @@ main {
     font-weight: 900;
     margin: 0;
 }
+
+.form-check-input:checked {
+    background-color: #1ed760;
+    border-color: #1ed760;
+}
