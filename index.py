@@ -21,13 +21,9 @@ from themes import themes
 # Compile all SCSS themes
 try:
     sass.compile(
-        dirname=('templates/themes', 'templates/themes'),
-        output_style='compressed'
+        dirname=("templates/themes", "templates/themes"), output_style="compressed"
     )
-    sass.compile(
-        dirname=('templates/', 'templates/'),
-        output_style='compressed'
-    )
+    sass.compile(dirname=("templates/", "templates/"), output_style="compressed")
 except Exception as e:
     print("Could not compile SCSS files")
 
@@ -85,7 +81,7 @@ auth_manager = spotipy.oauth2.SpotifyOAuth(
     redirect_uri=REDIRECT_URI,
     scope=SPOTIFY_SCOPES,
     cache_handler=cache_handler,
-    show_dialog=False
+    show_dialog=False,
 )
 
 
@@ -108,11 +104,14 @@ def save_user_to_db(auth_manager, code):
 
 # Homepage that handles login
 
-@app.route('/')
+
+@app.route("/")
 def index():
     if request.args.get("code"):
-        user_id = save_user_to_db(auth_manager=auth_manager, code=request.args.get("code"))
-        return redirect('/editor?uid={}'.format(user_id))
+        user_id = save_user_to_db(
+            auth_manager=auth_manager, code=request.args.get("code")
+        )
+        return redirect("/editor?uid={}".format(user_id))
 
     rendered_data = {"title": "Home"}
 
@@ -126,17 +125,17 @@ def index():
         rendered_data["spotify"] = spotify
         rendered_data["is_authenticated"] = True
 
-    return render_template('index.html', **rendered_data)
+    return render_template("index.html", **rendered_data)
 
 
 # Disconnect the user
-@app.route('/sign-out')
+@app.route("/sign-out")
 def sign_out():
     try:
         session.pop("token_info")
     except OSError as e:
         print("Error: %s" % (e))
-    return redirect('/')
+    return redirect("/")
 
 
 # Retrieve Access Token from Session or Firestore
@@ -179,19 +178,19 @@ def get_song_info(access_token):
         track["item"] = tracks["items"][randint(0, 9)]["track"]
         return track, False
 
-    return 'not playing', False
+    return "not playing", False
 
 
 # Widget Editor page
-@app.route('/editor')
+@app.route("/editor")
 def editor():
     uid = request.args.get("uid")
     if not uid:
-        return redirect('/')
+        return redirect("/")
 
     access_token = get_access_token(uid)
     if not access_token:
-        return Response('User not authorized', status=403)
+        return Response("User not authorized", status=403)
 
     song, is_now_playing = get_song_info(access_token)
 
@@ -241,43 +240,43 @@ def generate_svg(
         "song_duration": song_duration,
         "song_uri": song_uri,
         "is_now_playing": is_now_playing,
-        'invert_artist_title': invert_artist_title,
-        'progress_bar': progress_bar,
-        'sound_waves': sound_waves,
-        'sound_waves_color': sound_waves_color,
-        'progress_color': progress_color,
-        'cover': cover,
+        "invert_artist_title": invert_artist_title,
+        "progress_bar": progress_bar,
+        "sound_waves": sound_waves,
+        "sound_waves_color": sound_waves_color,
+        "progress_color": progress_color,
+        "cover": cover,
     }
 
     return render_template(f"themes/{theme}.html", **rendered_data)
 
 
 # Widget SVG direct URL
-@app.route('/widget')
+@app.route("/widget")
 def widget():
     uid = request.args.get("uid")
     if not uid:
-        return redirect('/')
+        return redirect("/")
 
-    theme = request.args.get("theme", default='default')
+    theme = request.args.get("theme", default="default")
     if theme not in themes:
-        print('Theme not found')
+        print("Theme not found")
 
     # Get this theme's max height
-    height = themes[theme]['max_height']
+    height = themes[theme]["max_height"]
 
     # Get all the parameters from the request
-    invert_artist_title = request.args.get("invert_artist_title") == 'true'
-    progress_bar = request.args.get("progress_bar") == 'true'
-    progress_color = request.args.get("progress_color", '#B3B3B3')
-    sound_waves = request.args.get('sound_waves') == 'true'
-    sound_waves_color = request.args.get('sound_waves_color', '#1ed760')
-    cover = request.args.get('cover') == 'true'
+    invert_artist_title = request.args.get("invert_artist_title") == "true"
+    progress_bar = request.args.get("progress_bar") == "true"
+    progress_color = request.args.get("progress_color", "#B3B3B3")
+    sound_waves = request.args.get("sound_waves") == "true"
+    sound_waves_color = request.args.get("sound_waves_color", "#1ed760")
+    cover = request.args.get("cover") == "true"
 
     # Get the song info
     access_token = get_access_token(uid)
     if not access_token:
-        return Response('User not authorized', status=403)
+        return Response("User not authorized", status=403)
     song, is_now_playing = get_song_info(access_token)
 
     # Pick data we need for the widget
@@ -333,9 +332,8 @@ def context_processor():
             left += width + bar_spacing
         return css_bar
 
-    return {
-        "generate_css_bar": generate_css_bar
-    }
+    return {"generate_css_bar": generate_css_bar}
+
 
 if __name__ == "__main__":
     app.run(debug=True)
