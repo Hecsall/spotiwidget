@@ -52,16 +52,21 @@
     height: 30px;
     margin: -30px auto 0 auto;
     position: relative;
-    width: 100%;
+    display: flex;
+    flex: 0 0 0;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: nowrap;
+
     &.no-cover {
         margin-bottom: 10px;
     }
     
     .bar {
         background: #{'{{ sound_waves_color}}'};
-        bottom: 1px;
         height: 3px;
-        position: absolute;
+        bottom: 0;
+        display: inline-block;
         animation: sound 0ms -800ms linear infinite alternate;
     }
 }

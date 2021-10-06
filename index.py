@@ -318,21 +318,20 @@ def widget():
 
 
 @app.context_processor
-def context_processor():
+def context_processor(): 
     @functools.lru_cache(maxsize=128)
     def generate_css_bar(bar_count=75, bar_width=3, bar_spacing=1):
         css_bar = ""
-        left = 0
-        width = bar_width
         for i in range(1, bar_count + 1):
             anim = randint(350, 500)
-            css_bar += ".bar:nth-child({})  {{ left: {}px; animation-duration: {}ms; width: {}px; }}".format(
-                i, left, anim, width
+            css_bar += ".bar:nth-child({})  {{ margin-left: {}px; animation-duration: {}ms; width: {}px; }}".format(
+                i, bar_spacing, anim, bar_width
             )
-            left += width + bar_spacing
         return css_bar
 
-    return {"generate_css_bar": generate_css_bar}
+    return {
+        "generate_css_bar": generate_css_bar,
+    }
 
 
 if __name__ == "__main__":
