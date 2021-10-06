@@ -50,9 +50,12 @@
 
 .bars {
     height: 30px;
-    margin: -30px 0 0 0px;
+    margin: -30px auto 0 auto;
     position: relative;
     width: 100%;
+    &.no-cover {
+        margin-bottom: 10px;
+    }
     
     .bar {
         background: #{'{{ sound_waves_color}}'};
