@@ -12,9 +12,15 @@
 header {
     padding: 25px;
     text-align: center;
-    font-weight: bolder;
     background-color: #121212;
     color: white;
+    .row {
+        align-items: center;
+    }
+
+    a {
+        color: white;
+    }
 
     h1 {
         color: #1ed760;
@@ -33,9 +39,25 @@ footer {
     font-weight: bolder;
     background-color: #121212;
     color: white;
+    
+    a {
+        color: white;
 
-    svg {
-        max-width: 100px;
+        svg {
+            padding-left: 5px;
+            max-width: 100px;
+        }
+    }
+    
+}
+
+a {
+    color: #121212;
+    fill: currentColor;
+    text-decoration: none;
+
+    &:hover {
+        color: #1ed760;
     }
 }
 
@@ -49,7 +71,7 @@ main {
             min-height: 500px;
         }
         iframe {
-            width: 100%;
+            width: 320px;
             height: 100%;
         }
     }
@@ -58,7 +80,7 @@ main {
 
 
 .huge-title {
-    font-size:5em;
+    font-size:4em;
     letter-spacing: -0.02em;
     font-weight: 900;
     margin: 0;
