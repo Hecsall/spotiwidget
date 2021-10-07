@@ -15,7 +15,7 @@
     </title>
 
     {# Load css file (compiled by running `python index.py`) #}
-    <style>{% include "themes/{}.css".format(theme) %}</style>
+    <style>{% include "themes/{}/{}.css".format(theme, theme) %}</style>
 
     <foreignObject width="320" height="{{height}}">
         {% block content %}{% endblock %}

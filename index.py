@@ -1,5 +1,5 @@
 from base64 import b64decode, b64encode
-from flask import Flask, session, request, render_template, redirect, Response
+from flask import Flask, session, request, render_template, redirect, Response, send_from_directory
 from firebase_admin import credentials, firestore
 import firebase_admin
 import spotipy
@@ -20,10 +20,8 @@ from themes import themes
 
 # Compile all SCSS themes
 try:
-    sass.compile(
-        dirname=("templates/themes", "templates/themes"), output_style="compressed"
-    )
-    sass.compile(dirname=("templates/", "templates/"), output_style="compressed")
+    sass.compile(dirname=("templates", "templates"), output_style="compressed")
+    sass.compile(dirname=("static/css", "static/css"), output_style="compressed")
 except Exception as e:
     print("Could not compile SCSS files")
 
@@ -53,6 +51,7 @@ firebase_db = firestore.client()
 # Initialize Flask app
 app = Flask(__name__)
 app.secret_key = FLASK_SECRET_KEY
+app.static_url_path = ''
 
 
 # Spotipy custom Cache Handler
@@ -248,7 +247,7 @@ def generate_svg(
         "cover": cover,
     }
 
-    return render_template(f"themes/{theme}.html", **rendered_data)
+    return render_template(f"themes/{theme}/{theme}.html", **rendered_data)
 
 
 # Widget SVG direct URL
@@ -317,8 +316,13 @@ def widget():
     return resp
 
 
+# @app.route('/static/css/<path:path>')
+# def send_css(path):
+#     return send_from_directory('css/templates', path)
+
+
 @app.context_processor
-def context_processor(): 
+def context_processor():
     @functools.lru_cache(maxsize=128)
     def generate_css_bar(bar_count=75, bar_width=3, bar_spacing=1):
         css_bar = ""
