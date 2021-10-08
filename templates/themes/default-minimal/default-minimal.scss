@@ -2,7 +2,7 @@
 
 
 .widget-container {
-    background-color: #121212;
+    background-color: #{'{{ background_color if background else "transparent" }}'};
     border-radius: 10px;
     padding: 10px;
 
@@ -33,12 +33,14 @@
 .big-text {
     color: #FFFFFF;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
-    margin-bottom: 5px;
-    margin-top: 10px;
-
+    padding-top: 5px;
+    padding-bottom: 5px;
     line-height: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .sub-text {
@@ -46,6 +48,9 @@
     font-size: 16px;
     text-align: center;
     margin-bottom: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .bars {

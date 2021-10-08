@@ -4,37 +4,34 @@
 .widget-container {
     background-color: #{'{{ background_color if background else "transparent" }}'};
     border-radius: 10px;
-    padding: 10px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: unset;
+    flex-direction: row;
+}
 
-    // Force last widget element to have no margin bottom
-    div:last-child:not(.sub-text) {
-        margin-bottom: 0 !important;
+.cover {
+    img {
+        display: block;
+        border-radius: 5px;
+        width: 64px;
+        height: 64px;
+        margin: 10px
     }
 }
 
-.card-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    line-height: 1em;
-    font-weight: bold;
-    margin-bottom: 11px;
-    color: #1ED760;
-    fill: currentColor;
-
-    svg {
-        width: 30px;
-        height: 30px;
-        margin-left: 6px;
-    }
-
+.side-content {
+    flex: 1;
+    overflow: hidden;
+    padding-right: 10px;
 }
 
 .big-text {
     color: #FFFFFF;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
     text-align: center;
+    margin-top: 15px;
     padding-bottom: 5px;
     line-height: 1em;
     overflow: hidden;
@@ -44,12 +41,17 @@
 
 .sub-text {
     color: #B3B3B3;
-    font-size: 16px;
+    font-size: 14px;
     text-align: center;
     margin-bottom: 20px;
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    &.no-waves {
+        margin-bottom: 15px;
+    }
 }
 
 .bars {
@@ -84,18 +86,6 @@
     100% {
         opacity: 1;
         height: 15px;
-    }
-}
-
-.cover {
-    margin-bottom: 10px;
-    text-align: center;
-
-    img {
-        display: block;
-        border-radius: 5px;
-        width: 300px;
-        height: 300px;
     }
 }
 

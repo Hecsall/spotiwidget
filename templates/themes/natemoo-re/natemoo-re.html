@@ -1,0 +1,79 @@
+{% extends 'themes/_theme-base.html' %}
+{% block content %}
+
+{# Add style for css bar#}
+<style>{{ generate_css_bar(bar_count=55, bar_width=3, bar_spacing=1) }}</style>
+
+
+{# Widget body #}
+<div xmlns="http://www.w3.org/1999/xhtml" class="widget-container">
+    
+    {% if cover %}
+    <div class='cover'>
+        <a href="{{ song_uri }}" title="Open on Spotify" target="_blank">
+            <img src="data:image/png;base64, {{song_cover_base64}}" />
+        </a>
+    </div>
+    {% endif %}
+
+    <div class="side-content">
+        {% if invert_artist_title %}
+        <div class="big-text">{{ song_title }}</div>
+        <div class="sub-text {{ 'no-waves' if not sound_waves }}">{{ song_artist }}</div>
+        {% else %}
+        <div class="big-text">{{ song_artist }}</div>
+        <div class="sub-text {{ 'no-waves' if not sound_waves }}">{{ song_title}}</div>
+        {% endif %}
+        
+        {% if is_now_playing and sound_waves %}
+            <div class='bars {% if not cover %}no-cover{% endif %}'>
+                {% for i in range(0, 75) %}
+                    <div class='bar'></div>
+                {% endfor %}            
+            </div>
+        {% endif %}
+
+        {% if is_now_playing and progress_bar %}
+        <div class="progress-container">
+            <div class="progress"></div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{# Widget dynamic behaviours #}
+<script>
+(function(){
+{% if is_now_playing %}
+
+    {% if progress_bar %}
+    // On page load, tell the progress to stretch to 100% width.
+    // Since the width in CSS has a transition of `remaining_duration` seconds,
+    // the css will handle the animation smoothly without any more JavaScript.
+    setTimeout(function(){
+        var progressBar = document.querySelector('.progress');
+        progressBar.style.width = '100%';
+    }, 200);
+    {% endif %}
+    
+    // On page load, start a timer that will reload the widget when the song ends,
+    // allowing the widget to refresh and display the next song. 
+    var songLength = parseInt("{{song_duration}}");
+    var songProgress = parseInt("{{song_progress}}");
+    setTimeout(function(){
+        location.reload();
+    }, (songLength - songProgress) + 500);
+
+{% else %}
+
+    // If nothing is playing, refresh every minute to re-check
+    setInterval(function(){
+        location.reload();
+    }, 60000);
+
+{% endif %}
+})();
+</script>
+
+
+{% endblock %}
