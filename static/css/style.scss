@@ -66,6 +66,15 @@ main {
     background-color: hsl(141, 76%, 90%);
 }
 
+.profile-picture {
+    width: 150px;
+    border-radius: 999px; 
+}
+
+.user-id {
+    font-size: 20px
+}
+
 #editor-page {
     .editor {
         .editor-preview {

@@ -8,11 +8,8 @@
 1. Go to https://spotiwidget.vercel.app/
 2. Login with your Spotify Account
 3. Customize your widget as you like
-4. Once done, click the **Get Widget URL** button
-5. Copy the URL of the page just opened, and place that inside a Markdown image like this:
-```markdown
-[![SpotiWidget](generated_url)](https://github.com/Hecsall/spotiwidget)
-```
+4. Copy the generated code at the bottom of the page and place it in any Markdown file
+5. Enjoy!
 
 ## **Local development setup**
 Create a Python virtualenvironment and install dependencies

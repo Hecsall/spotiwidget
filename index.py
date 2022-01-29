@@ -324,11 +324,6 @@ def widget():
     return resp
 
 
-# @app.route('/static/css/<path:path>')
-# def send_css(path):
-#     return send_from_directory('css/templates', path)
-
-
 @app.context_processor
 def context_processor():
     @functools.lru_cache(maxsize=128)

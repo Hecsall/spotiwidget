@@ -3,13 +3,39 @@
 {% block content %}
 
 
-{% if is_authenticated %}
-    <h2>Hi {{ spotify.me()["id"] }}</h2>
-    <a href="/sign-out">Sign out<a/><br><br>
-    <a href="/editor?uid={{ spotify.me()["id"] }}">Go to Widget Editor</a>
-{% else %}
-    <h2><a href="{{ auth_url }}">Sign in with Spotify</a></h2>
-{% endif %}
+<div class="container">
+    <div class="row pt-4">
+        <div class="col text-center pt-4">
+            
+            {% if is_authenticated %}
+                <h4>Logged in as</h4>
+                
+                <img 
+                    src="{{ spotify.me()['images'][0]['url'] }}"
+                    alt="{{ spotify.me()["display_name"] }} profile picture"
+                    class="profile-picture"
+                    >
+                <h1>
+                    <b>{{ spotify.me()["display_name"] }}</b><br>
+                </h1>
+                
+                <div class="pt-4">
+                    <a href="/editor?uid={{ spotify.me()["id"] }}" class="btn btn-dark">Go to Widget Editor</a>
+                </div>
+
+                <div class="pt-2">
+                    <a href="/sign-out" class="">Sign out<a/><br><br>
+                </div>
+            {% else %}
+            <h4>Sign in with Spotify</h4>
+            
+            <a href="{{ auth_url }}" class="btn btn-dark">Sign in</a>
+            {% endif %}
+        
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock %}
