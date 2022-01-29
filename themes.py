@@ -1,17 +1,11 @@
 
-# TODO: create config objects for themes, with available fields, size etc
-# For now this only allows to display new themes by name, and set their heights
+# TODO: Maybe for the future, allow to specify which fields are available for each theme.
+# For now this only allows to display new themes by name, and set their height
 
 themes = {
     "default": {
         'max_height': '450px',
         'description': '',
-        # "available_fields": {
-        #     "invert_author_title": False,
-        #     "toggle_song_progress_bar": True,
-        #     "toggle_sound_waves": True,
-
-        # }
     },
     "default-minimal": {
         'max_height': '410px',

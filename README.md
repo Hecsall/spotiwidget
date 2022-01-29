@@ -1,8 +1,10 @@
-# Spotify Widget
+# SpotiWidget
 
 "Currently Playing" SVG Spotify Widget.
 
-> This project used to be a fork of [https://github.com/kittinan/spotify-github-profile](https://github.com/kittinan/spotify-github-profile) but since a lot of python code changed, I decided to start a separate repo for it.
+![SpotiWidget Example](https://raw.githubusercontent.com/Hecsall/spotiwidget/master/static/img/readme-screen.png)
+
+> This project used to be a fork of [https://github.com/kittinan/spotify-github-profile](https://github.com/kittinan/spotify-github-profile) but since a lot code changed, I decided to start a separate repo for it.
 
 ## **Usage**
 <a href="https://spotiwidget.vercel.app/" target="_blank" title="Open SpotiWidget">
@@ -43,8 +45,9 @@ python index.py
 > :magic_wand: &rarr; Uses an internal script tag to handle dynamic changes. These scripts won't start on GitHub, but the rest of the widget will be displayed normally. 
 - :magic_wand: **Auto refresh**: I added a `<script>` tag inside the SVG that will auto refresh the widget when the song ends.
 - :magic_wand: **Song progress**: With the `<script>` of the point above, it's now possible to have a progress bar to show the song progress (almost entirely in CSS).
+- Settings to change background, sound waves and progress bar color.
 - **Upgraded dependencies**: Not a big deal, but I bumped all the dependencies versions to the latest available.
-- **SCSS styles**: Theme styles in SCSS (compiled when `app.py` runs).
+- **SCSS styles**: Theme styles in SCSS (compiled when `index.py` runs).
 
 ## **TODO**
 - Plan how to manage widgets width and height automatically
