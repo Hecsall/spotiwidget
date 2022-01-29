@@ -89,6 +89,17 @@ main {
 
 }
 
+pre code {
+    background-color: #121212;
+    color: #ffffff;
+    padding: 15px;
+    border-radius: 10px;
+    display: block;
+    white-space: pre-wrap;
+    max-width: 100%;
+    min-width: 100px;
+    font-family: monospace;
+}
 
 .huge-title {
     font-size:4em;
